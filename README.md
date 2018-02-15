@@ -1,39 +1,113 @@
-# HUGO Website Engine in Docker
+![Hugo](https://raw.githubusercontent.com/gohugoio/hugoDocs/master/static/img/hugo-logo.png)
 
-**Dockerized version of the HUGO (gohugo.io) executable. Provides a quick way to run the HUGO 0.14 linux executable from a docker image.**
+A Fast and Flexible Static Site Generator built with love by [bep](https://github.com/bep), [spf13](http://spf13.com/) and [friends](https://github.com/gohugoio/hugo/graphs/contributors) in [Go][].
 
-More about Hugo: http://www.gohugo.io/
+[Website](https://gohugo.io) |
+[Forum](https://discourse.gohugo.io) |
+[Developer Chat (no support)](https://gitter.im/gohugoio/hugo) |
+[Documentation](https://gohugo.io/overview/introduction/) |
+[Installation Guide](https://gohugo.io/overview/installing/) |
+[Contribution Guide](CONTRIBUTING.md) |
+[Twitter](http://twitter.com/gohugoio)
 
-Giant Swarm uses Hugo for it's [documentation](https://docs.giantswarm.io/). We provide this image basically to fulfill our own needs, but welcome contributions and suggestions via [github.com/giantswarm/hugo-docker](https://github.com/giantswarm/hugo-docker).
+[![GoDoc](https://godoc.org/github.com/gohugoio/hugo?status.svg)](https://godoc.org/github.com/gohugoio/hugo)
+[![Linux and macOS Build Status](https://api.travis-ci.org/gohugoio/hugo.svg?branch=master&label=Linux+and+macOS+build "Linux and macOS Build Status")](https://travis-ci.org/gohugoio/hugo)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/a5mr220vsd091kua?svg=true&label=Windows+build "Windows Build Status")](https://ci.appveyor.com/project/bep/hugo/branch/master)
+[![Dev chat at https://gitter.im/gohugoio/hugo](https://img.shields.io/badge/gitter-developer_chat-46bc99.svg)](https://gitter.im/spf13/hugo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gohugoio/hugo)](https://goreportcard.com/report/github.com/gohugoio/hugo)
 
-## Running
+## Overview
 
-This is a simplistic example of how to call the hugo executable:
+Hugo is a static HTML and CSS website generator written in [Go][].
+It is optimized for speed, ease of use, and configurability.
+Hugo takes a directory with content and templates and renders them into a full HTML website.
 
-    docker run --rm -ti giantswarm/hugo help
+Hugo relies on Markdown files with front matter for metadata, and you can run Hugo from any directory.
+This works well for shared hosts and other systems where you don’t have a privileged account.
 
-To make it really useful, you'll need to mount the current directory to the container, so hugo can write files:
+Hugo renders a typical website of moderate size in a fraction of a second.
+A good rule of thumb is that each piece of content renders in around 1 millisecond.
 
-    docker run --rm -ti -v $(pwd):$(pwd) -w $(pwd) giantswarm/hugo new site ./site
+Hugo is designed to work well for any kind of website including blogs, tumbles, and docs.
 
-To make the command a bit more accessible, create an alias. Note that we add the `-p` option here to make hugo's HTTP port 1313 available.
+#### Supported Architectures
 
-    alias myhugo="docker run --rm -ti -v $(pwd):$(pwd) -w $(pwd) -p 1313:1313 giantswarm/hugo"
+Currently, we provide pre-built Hugo binaries for Windows, Linux, FreeBSD, NetBSD, macOS (Darwin), and [Android](https://gist.github.com/bep/a0d8a26cf6b4f8bc992729b8e50b480b) for x64, i386 and ARM architectures.
 
-Then we can call hugo like this:
+Hugo may also be compiled from source wherever the Go compiler tool chain can run, e.g. for other operating systems including DragonFly BSD, OpenBSD, Plan 9, and Solaris.
 
-    # Creating a new site in folder ./site
-    myhugo new site ./site
+**Complete documentation is available at [Hugo Documentation][].**
 
-    # Serve using hugo's built-in server
-    # (use your currect Docker IP address in the baseUrl)
-    myhugo server --theme=hyde --baseUrl=http://192.168.59.103 --bind=0.0.0.0 -s ./site
+## Choose How to Install
 
-    # Generate public files and exit
-    myhugo --theme=hyde --baseUrl=http://192.168.59.103 -s ./site
+If you want to use Hugo as your site generator, simply install the Hugo binaries.
+The Hugo binaries have no external dependencies.
 
-## Build your own
+To contribute to the Hugo source code or documentation, you should [fork the Hugo GitHub project](https://github.com/gohugoio/hugo#fork-destination-box) and clone it to your local machine.
 
-To build your own image, do this:
+Finally, you can install the Hugo source code with `go`, build the binaries yourself, and run Hugo that way.
+Building the binaries is an easy task for an experienced `go` getter.
 
-    docker build -t giantswarm/hugo .
+### Install Hugo as Your Site Generator (Binary Install)
+
+Use the [installation instructions in the Hugo documentation](https://gohugo.io/overview/installing/).
+
+### Build and Install the Binaries from Source (Advanced Install)
+
+Add Hugo and its package dependencies to your go `src` directory.
+
+    go get -v github.com/gohugoio/hugo
+
+Once the `get` completes, you should find your new `hugo` (or `hugo.exe`) executable sitting inside `$GOPATH/bin/`.
+
+To update Hugo’s dependencies, use `go get` with the `-u` option.
+
+    go get -u -v github.com/gohugoio/hugo
+	
+## The Hugo Documentation
+
+The Hugo documentation now lives in its own repository, see https://github.com/gohugoio/hugoDocs. But we do keep a version of that documentation as a `git subtree` in this repository. To build the sub folder `/docs` as a Hugo site, you need to clone this repo:
+
+```bash
+git clone git@github.com:gohugoio/hugo.git
+```
+## Contributing to Hugo
+
+For a complete guide to contributing to Hugo, see the [Contribution Guide](CONTRIBUTING.md).
+
+We welcome contributions to Hugo of any kind including documentation, themes,
+organization, tutorials, blog posts, bug reports, issues, feature requests,
+feature implementations, pull requests, answering questions on the forum,
+helping to manage issues, etc.
+
+The Hugo community and maintainers are [very active](https://github.com/gohugoio/hugo/pulse/monthly) and helpful, and the project benefits greatly from this activity.
+
+### Asking Support Questions
+
+We have an active [discussion forum](https://discourse.gohugo.io) where users and developers can ask questions.
+Please don't use the GitHub issue tracker to ask questions.
+
+### Reporting Issues
+
+If you believe you have found a defect in Hugo or its documentation, use
+the GitHub issue tracker to report the problem to the Hugo maintainers.
+If you're not sure if it's a bug or not, start by asking in the [discussion forum](https://discourse.gohugo.io).
+When reporting the issue, please provide the version of Hugo in use (`hugo version`).
+
+### Submitting Patches
+
+The Hugo project welcomes all contributors and contributions regardless of skill or experience level.
+If you are interested in helping with the project, we will help you with your contribution.
+Hugo is a very active project with many contributions happening daily.
+
+Because we want to create the best possible product for our users and the best contribution experience for our developers,
+we have a set of guidelines which ensure that all contributions are acceptable.
+The guidelines are not intended as a filter or barrier to participation.
+If you are unfamiliar with the contribution process, the Hugo team will help you and teach you how to bring your contribution in accordance with the guidelines.
+
+For a complete guide to contributing code to Hugo, see the [Contribution Guide](CONTRIBUTING.md).
+
+[![Analytics](https://ga-beacon.appspot.com/UA-7131036-6/hugo/readme)](https://github.com/igrigorik/ga-beacon)
+
+[Go]: https://golang.org/
+[Hugo Documentation]: https://gohugo.io/overview/introduction/
